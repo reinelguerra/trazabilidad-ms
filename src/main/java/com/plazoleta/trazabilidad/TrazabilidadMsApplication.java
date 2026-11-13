@@ -1,4 +1,4 @@
-package main.java.com.plazoleta.trazabilidad;
+package com.plazoleta.trazabilidad;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
