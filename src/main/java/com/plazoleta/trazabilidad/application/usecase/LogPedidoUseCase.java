@@ -1,8 +1,6 @@
 package com.plazoleta.trazabilidad.application.usecase;
 
 import com.plazoleta.trazabilidad.domain.api.LogPedidoServicePort;
-import com.plazoleta.trazabilidad.domain.exception.AccesoDenegadoException;
-import com.plazoleta.trazabilidad.domain.exception.PedidoSinRegistrosException;
 import com.plazoleta.trazabilidad.domain.exception.ReglaDeNegocioException;
 import com.plazoleta.trazabilidad.domain.model.EstadoPedido;
 import com.plazoleta.trazabilidad.domain.model.LogPedido;
@@ -11,7 +9,6 @@ import com.plazoleta.trazabilidad.domain.util.MensajeError;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class LogPedidoUseCase implements LogPedidoServicePort {
 
@@ -35,21 +32,6 @@ public class LogPedidoUseCase implements LogPedidoServicePort {
                 log.estadoNuevo(),
                 LocalDateTime.now(reloj));
         return logPedidoPersistencePort.guardarLog(conFecha);
-    }
-
-    @Override
-    public List<LogPedido> consultarHistorial(Long idPedido, Long idCliente) {
-        if (idPedido == null || idPedido <= 0) {
-            throw new ReglaDeNegocioException(MensajeError.ID_PEDIDO_INVALIDO);
-        }
-        List<LogPedido> historial = logPedidoPersistencePort.buscarPorIdPedido(idPedido);
-        if (historial.isEmpty()) {
-            throw new PedidoSinRegistrosException(MensajeError.PEDIDO_SIN_REGISTROS);
-        }
-        if (!historial.get(0).idCliente().equals(idCliente)) {
-            throw new AccesoDenegadoException(MensajeError.PEDIDO_AJENO);
-        }
-        return historial;
     }
 
     private void validarCambioDeEstado(LogPedido log) {
