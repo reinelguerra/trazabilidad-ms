@@ -47,8 +47,6 @@ public class SecurityConfiguration {
                                 rutas.matcher("/h2-console/**")).permitAll()
                         .requestMatchers(rutas.matcher(HttpMethod.POST, RUTA_TRAZABILIDAD))
                                 .hasAnyRole(RolUsuario.CLIENTE.name(), RolUsuario.EMPLEADO.name())
-                                .requestMatchers(rutas.matcher(HttpMethod.GET, RUTA_TRAZABILIDAD + "/{idPedido}"))
-                                .hasRole(RolUsuario.CLIENTE.name())
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenParser),
                         UsernamePasswordAuthenticationFilter.class)

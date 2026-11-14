@@ -1,8 +1,6 @@
 package com.plazoleta.trazabilidad.infrastructure.exception;
 
-import com.plazoleta.trazabilidad.domain.exception.AccesoDenegadoException;
 import com.plazoleta.trazabilidad.domain.exception.DomainException;
-import com.plazoleta.trazabilidad.domain.exception.PedidoSinRegistrosException;
 import com.plazoleta.trazabilidad.domain.util.MensajeError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +9,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.stream.Collectors;
 
@@ -21,16 +18,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ErrorResponse> reglaDeNegocio(DomainException e) {
         return construir(HttpStatus.BAD_REQUEST, e.getMessage());
-    }
-
-    @ExceptionHandler(PedidoSinRegistrosException.class)
-    public ResponseEntity<ErrorResponse> pedidoSinRegistros(PedidoSinRegistrosException e) {
-        return construir(HttpStatus.NOT_FOUND, e.getMessage());
-    }
-
-    @ExceptionHandler(AccesoDenegadoException.class)
-    public ResponseEntity<ErrorResponse> accesoDenegado(AccesoDenegadoException e) {
-        return construir(HttpStatus.FORBIDDEN, e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -46,11 +33,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> jsonInvalido(HttpMessageNotReadableException e) {
         return construir(HttpStatus.BAD_REQUEST, MensajeError.CUERPO_INVALIDO);
-    }
-
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> idInvalido(MethodArgumentTypeMismatchException e) {
-        return construir(HttpStatus.BAD_REQUEST, MensajeError.ID_PEDIDO_INVALIDO);
     }
 
     private ResponseEntity<ErrorResponse> construir(HttpStatus status, String mensaje) {
