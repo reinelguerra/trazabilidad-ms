@@ -10,6 +10,10 @@ public final class MensajeError {
     public static final String ESTADO_REPETIDO = "El estado nuevo debe ser distinto al estado anterior";
         public static final String PEDIDO_SIN_REGISTROS = "El pedido no tiene registros de trazabilidad";
     public static final String PEDIDO_AJENO = "El pedido no pertenece al cliente autenticado";
+    public static final String RESTAURANTE_AJENO = "El restaurante no pertenece al propietario autenticado";
+    public static final String RESTAURANTE_NO_ENCONTRADO = "No existe un restaurante con ese id";
+        public static final String PLAZOLETA_NO_DISPONIBLE =
+            "El servicio de plazoleta no está disponible, intenta más tarde";
 
     public static final String ID_PEDIDO_INVALIDO = "El idPedido es obligatorio y debe ser un número positivo";
     public static final String ID_CLIENTE_INVALIDO = "El idCliente es obligatorio y debe ser un número positivo";

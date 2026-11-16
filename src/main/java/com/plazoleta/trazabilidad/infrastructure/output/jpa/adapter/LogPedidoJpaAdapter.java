@@ -17,6 +17,7 @@ public class LogPedidoJpaAdapter implements LogPedidoPersistencePort {
         this.logPedidoRepository = logPedidoRepository;
         this.logPedidoEntityMapper = logPedidoEntityMapper;
     }
+    
 
     @Override
     public LogPedido guardarLog(LogPedido log) {
@@ -27,6 +28,13 @@ public class LogPedidoJpaAdapter implements LogPedidoPersistencePort {
     @Override
     public List<LogPedido> buscarPorIdPedido(Long idPedido) {
         return logPedidoRepository.findByIdPedidoOrderByFechaAscIdAsc(idPedido).stream()
+                .map(logPedidoEntityMapper::toModel)
+                .toList();
+    }
+    
+    @Override
+    public List<LogPedido> buscarPorIdRestaurante(Long idRestaurante) {
+        return logPedidoRepository.findByIdRestauranteOrderByFechaAscIdAsc(idRestaurante).stream()
                 .map(logPedidoEntityMapper::toModel)
                 .toList();
     }
