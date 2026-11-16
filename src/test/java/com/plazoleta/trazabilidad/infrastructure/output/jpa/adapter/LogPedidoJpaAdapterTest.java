@@ -14,9 +14,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -43,6 +45,18 @@ class LogPedidoJpaAdapterTest {
             entidad.setId(99L);
             return entidad;
         });
+    }
+
+    private LogPedidoEntity entidad(EstadoPedido anterior, EstadoPedido nuevo, LocalDateTime fecha) {
+        LogPedidoEntity entidad = new LogPedidoEntity();
+        entidad.setIdPedido(10L);
+        entidad.setIdCliente(20L);
+        entidad.setIdRestaurante(30L);
+        entidad.setIdEmpleado(40L);
+        entidad.setEstadoAnterior(anterior);
+        entidad.setEstadoNuevo(nuevo);
+        entidad.setFecha(fecha);
+        return entidad;
     }
 
     @Test
@@ -76,5 +90,27 @@ class LogPedidoJpaAdapterTest {
         assertNull(resultado.idEmpleado());
         assertNull(resultado.estadoAnterior());
         assertEquals(EstadoPedido.PENDIENTE, resultado.estadoNuevo());
+    }
+
+    @Test
+    void buscarPorIdPedido_devuelveLosLogsComoModelosEnElMismoOrden() {
+        LocalDateTime despues = FECHA.plusMinutes(5);
+        when(logPedidoRepository.findByIdPedidoOrderByFechaAscIdAsc(10L)).thenReturn(List.of(
+                entidad(null, EstadoPedido.PENDIENTE, FECHA),
+                entidad(EstadoPedido.PENDIENTE, EstadoPedido.EN_PREPARACION, despues)));
+
+        List<LogPedido> resultado = adapter.buscarPorIdPedido(10L);
+
+        assertEquals(List.of(
+                new LogPedido(10L, 20L, 30L, 40L, null, EstadoPedido.PENDIENTE, FECHA),
+                new LogPedido(10L, 20L, 30L, 40L, EstadoPedido.PENDIENTE, EstadoPedido.EN_PREPARACION, despues)),
+                resultado);
+    }
+
+    @Test
+    void buscarPorIdPedido_sinLogs_devuelveListaVacia() {
+        when(logPedidoRepository.findByIdPedidoOrderByFechaAscIdAsc(10L)).thenReturn(List.of());
+
+        assertTrue(adapter.buscarPorIdPedido(10L).isEmpty());
     }
 }
