@@ -49,6 +49,9 @@ public class SecurityConfiguration {
                                 .hasAnyRole(RolUsuario.CLIENTE.name(), RolUsuario.EMPLEADO.name())
                                 .requestMatchers(rutas.matcher(HttpMethod.GET, RUTA_TRAZABILIDAD + "/{idPedido}"))
                                 .hasRole(RolUsuario.CLIENTE.name())
+                                .requestMatchers(rutas.matcher(HttpMethod.GET,
+                                RUTA_TRAZABILIDAD + "/restaurantes/*/eficiencia/*"))
+                                .hasRole(RolUsuario.PROPIETARIO.name())
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenParser),
                         UsernamePasswordAuthenticationFilter.class)

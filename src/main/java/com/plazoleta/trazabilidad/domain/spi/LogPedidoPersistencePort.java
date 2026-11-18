@@ -9,4 +9,5 @@ public interface LogPedidoPersistencePort {
     LogPedido guardarLog(LogPedido log);
 
     List<LogPedido> buscarPorIdPedido(Long idPedido);
+        List<LogPedido> buscarPorIdRestaurante(Long idRestaurante);
 }

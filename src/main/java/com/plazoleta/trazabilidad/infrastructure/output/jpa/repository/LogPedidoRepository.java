@@ -8,4 +8,5 @@ import java.util.List;
 public interface LogPedidoRepository extends JpaRepository<LogPedidoEntity, Long> {
 
     List<LogPedidoEntity> findByIdPedidoOrderByFechaAscIdAsc(Long idPedido);
+        List<LogPedidoEntity> findByIdRestauranteOrderByFechaAscIdAsc(Long idRestaurante);
 }
